@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -10,9 +11,14 @@ var connString = builder.Configuration.GetConnectionString("StoreContext");
 
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(opt =>
+//opt.Conventions.AuthorizeFolder("/Games/Delete")
+opt.Conventions.AuthorizeFolder("/Games")
+);
 builder.Services.AddDbContext<StoreContext>(options =>
     options.UseMySql(connString, dbmsVersion));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<StoreContext>();
 
 var app = builder.Build();
 

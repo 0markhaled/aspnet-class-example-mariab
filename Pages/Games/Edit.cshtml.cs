@@ -6,17 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RP_EF_Maria.Pages;
+using RP_EF_Maria.Models;
 
 namespace RP_EF_Maria.Pages.Games
 {
     public class EditModel : PageModel
     {
         private readonly StoreContext _context;
+        private readonly ILogger<EditModel> _logger;
 
-        public EditModel(StoreContext context)
+        public EditModel(StoreContext context, ILogger<EditModel> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [BindProperty]
@@ -29,7 +31,7 @@ namespace RP_EF_Maria.Pages.Games
                 return NotFound();
             }
 
-            var game =  await _context.Game.FirstOrDefaultAsync(m => m.GameId == id);
+            var game = await _context.Game.FirstOrDefaultAsync(m => m.GameId == id);
             if (game == null)
             {
                 return NotFound();
@@ -44,6 +46,14 @@ namespace RP_EF_Maria.Pages.Games
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("ModelState is invalid");
+                foreach (var val in ModelState.Values.SelectMany(v => v.Errors).Select(e => (e.ErrorMessage, e.Exception)))
+                {
+
+                    _logger.LogWarning($"ModelState[{val.ErrorMessage}] : {val.Exception}");
+                }
+
+
                 return Page();
             }
 
@@ -70,7 +80,7 @@ namespace RP_EF_Maria.Pages.Games
 
         private bool GameExists(uint id)
         {
-          return (_context.Game?.Any(e => e.GameId == id)).GetValueOrDefault();
+            return (_context.Game?.Any(e => e.GameId == id)).GetValueOrDefault();
         }
     }
 }

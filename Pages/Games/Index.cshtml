@@ -1,15 +1,40 @@
-@page 
+@page
 @model RP_EF_Maria.Pages.Games.IndexModel
+@inject StoreContext _context
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
 <h1>Index</h1>
+<div>
+    <h3>Filter</h3>
+    <form>
+        <p>Search Title: <input type="text" asp-for="Query" /> </p>
+        <p>Search Publish Date: <input type="date" asp-for="DateChosen" />
+            <select asp-for="BeforeDateChosen">
+                <option value="true">Less or equals</option>
+                <option value="false">Greater</option>
+            </select>
+        </p>
+
+        <label for="toggle">Include Date Search</label>
+        <input type="checkbox" id="toggle" asp-for="IncludeSearch">
+        <input type="submit" value="Search" />
+
+    </form>
+
+
+</div>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -29,26 +54,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Game) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Release)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.GameId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.GameId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.GameId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Game)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Release)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.GameId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.GameId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.GameId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

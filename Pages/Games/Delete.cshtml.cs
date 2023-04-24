@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using RP_EF_Maria.Pages;
+using RP_EF_Maria.Models;
 
 namespace RP_EF_Maria.Pages.Games
 {
@@ -18,8 +18,9 @@ namespace RP_EF_Maria.Pages.Games
             _context = context;
         }
 
-        [BindProperty]
-      public Game Game { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public string Message { get; set; } = default!;
+        public Game Game { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(uint? id)
         {
@@ -34,7 +35,7 @@ namespace RP_EF_Maria.Pages.Games
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Game = game;
             }
